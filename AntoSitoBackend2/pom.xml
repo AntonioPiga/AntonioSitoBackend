@@ -110,11 +110,10 @@
             <version>8.0.25</version>
             <scope>runtime</scope>
         </dependency>
-
     </dependencies>
 
     <build>
-        <finalName>sitoAntonio</finalName>
+        <finalName>Backend Antonio Piga</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

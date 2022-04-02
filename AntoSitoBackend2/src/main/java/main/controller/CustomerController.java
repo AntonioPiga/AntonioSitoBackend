@@ -1,6 +1,7 @@
 package main.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -10,6 +11,7 @@ import main.model.dto.CustomerDto;
 import main.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,8 +31,8 @@ public class CustomerController {
             responses = {@ApiResponse(responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Object.class)))
             })
     @PostMapping("insert")
-    public void insertCustomer(@RequestBody CustomerDto customer) {
-        customerService.insertCustomer(customer);
+    public ResponseEntity<Object> insertCustomer(@RequestBody CustomerDto customer) {
+        return customerService.insertCustomer(customer);
     }
 
     @Operation(
@@ -39,9 +41,12 @@ public class CustomerController {
             method = "GET",
             responses = {@ApiResponse(responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Object.class)))
             })
-    @PutMapping("insert")
-    public Object updateCustomer(@RequestBody CustomerEntity customer) {
-        return customerService.updateCustomer(customer);
+    @PutMapping("update")
+    public Object updateCustomer(@Parameter(name = "idCustomer", required = true, example = "1") @RequestParam Long idCustomer,
+                                 @Parameter(name = "name", example = "antonio", required = true) @RequestParam String name,
+                                 @Parameter(name = "email", example = "antonio@piga.it", required = true) @RequestParam String email,
+                                 @Parameter(name = "message", example = "message to save here") @RequestParam String message) {
+        return customerService.updateCustomer(idCustomer, name, email, message);
     }
 
     @Operation(
@@ -51,8 +56,30 @@ public class CustomerController {
             responses = {@ApiResponse(responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Object.class)))
             })
     @GetMapping("customers")
-    public List<CustomerEntity> getCustomers() {
+    public ResponseEntity<Iterable<CustomerEntity>> getCustomers() {
         return customerService.getAllCustomers();
+    }
+
+    @GetMapping("getone")
+    public ResponseEntity<Object> getOneCustomer(@Parameter(name = "id", required = true) @RequestParam Long id) {
+
+        System.out.println(id);
+
+        return customerService.getCustomerById(id);
+
+    }
+
+    @Operation(
+            description = "Delete customer by id",
+            tags = {"customers"},
+            method = "GET",
+            responses = {@ApiResponse(responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Object.class)))
+            })
+    @DeleteMapping("delete")
+    public ResponseEntity<Object> deleteCustomer(@Parameter(name = "id", required = true) @RequestParam Long id) {
+
+        return customerService.deleteCustomerById(id);
+
     }
 
 }
