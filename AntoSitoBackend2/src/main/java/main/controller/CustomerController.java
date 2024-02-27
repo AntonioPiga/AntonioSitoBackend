@@ -30,7 +30,7 @@ public class CustomerController {
             method = "GET",
             responses = {@ApiResponse(responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Object.class)))
             })
-    @PostMapping("insert")
+    @PostMapping
     public ResponseEntity<Object> insertCustomer(@RequestBody CustomerDto customer) {
         return customerService.insertCustomer(customer);
     }
@@ -41,7 +41,7 @@ public class CustomerController {
             method = "GET",
             responses = {@ApiResponse(responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Object.class)))
             })
-    @PutMapping("update")
+    @PutMapping
     public Object updateCustomer(@Parameter(name = "idCustomer", required = true, example = "1") @RequestParam Long idCustomer,
                                  @Parameter(name = "name", example = "antonio", required = true) @RequestParam String name,
                                  @Parameter(name = "email", example = "antonio@piga.it", required = true) @RequestParam String email,
@@ -55,15 +55,13 @@ public class CustomerController {
             method = "GET",
             responses = {@ApiResponse(responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Object.class)))
             })
-    @GetMapping("customers")
+    @GetMapping("all")
     public ResponseEntity<Iterable<CustomerEntity>> getCustomers() {
         return customerService.getAllCustomers();
     }
 
-    @GetMapping("getone")
+    @GetMapping
     public ResponseEntity<Object> getOneCustomer(@Parameter(name = "id", required = true) @RequestParam Long id) {
-
-        System.out.println(id);
 
         return customerService.getCustomerById(id);
 
@@ -81,5 +79,4 @@ public class CustomerController {
         return customerService.deleteCustomerById(id);
 
     }
-
 }
